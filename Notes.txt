@@ -1,0 +1,143 @@
+1. BASH脚本 CASE用法:
+
+----a. basic
+    case $REPLY in
+         [[:alpha:]])   echo "is a single alphabetic character.";;
+         [ABC][0-9])    echo "is A, B, or C followed by a digit.";;
+         ???)           echo "is three characters long.";;
+         *.txt)         echo "is a word ending in '.txt'";;
+         *)             echo "is something else";;
+    esac
+
+----b. Combine multiple patterns using the vertical bar:
+    case $REPLY in
+        #*.txt) echo "This is a test"
+               #;;
+        q|Q) echo "Program terminated."
+             exit
+             ;;
+        a|A) echo "Hostname: $HOSTNAME"
+             uptime
+             ;;
+        b|B) df -h
+             ;;
+        c|C) if [[ $(id -u) -eq 0 ]]; then
+                 echo "Home Space Utilization (All Users)"
+                 du -sh /home/*
+             else
+                 echo "Home Space Utilization ($USER)"
+                 du -sh $HOME
+             fi
+             ;;
+        *)   echo "Invalid entry" >&2
+             exit 1
+             ;;
+    esac
+
+----c. Perform multiple actions
+    echo
+    case $REPLY in
+            [[:upper:]])    echo "'$REPLY' is upper case." ;;&
+            [[:lower:]])    echo "'$REPLY' is lower case." ;;&
+            [[:alpha:]])    echo "'$REPLY' is alphabetic." ;;&
+            [[:digit:]])    echo "'$REPLY' is digit." ;;&
+            [[:graph:]])    echo "'$REPLY' is visible character." ;;&
+            [[:punct:]])    echo "'$REPLY' is punctuation symbol." ;;&
+            [[:space:]])    echo "'$REPLY' is white space character." ;;&
+    esac
+
+2x. BASH脚本 Positional Parameters
+
+---a. the number of arguments:
+      Number of arguments: $#
+
+---b. shift, get access to many arguments
+
+      count=1
+
+      while [[ $# -gt 0 ]]; do
+        echo "Argument $count = $1"
+        count=$((count +1))
+        shift
+      done
+
+----c. using positon para with shell function
+
+       file_info () {
+
+           # file_info: function to display file information
+
+           if [[ -e $1 ]]; then
+               echo -e "\nFile Type:"
+               file $1
+               echo -e "\nFile Status:"
+               stat $1
+           else
+                echo "$FUNCNAME: usage: $FUNCNAME file" >&2
+                exit 1
+           fi   
+           }
+
+           file_info $1
+
+----d. * and @ special parameters
+
+程序:
+print_params () {
+    echo "\$1 = $1"
+    echo "\$2 = $2"
+    echo "\$3 = $3"
+    echo "\$4 = $4"
+}
+
+pass_params () {
+    echo -e "\n" '$* :';   print_params $*
+    echo -e "\n" '"$*" :'; print_params "$*"
+    echo -e "\n" '$@ :';   print_params $@
+    echo -e "\n" '"$@" :'; print_params "$@"
+}
+
+pass_params "word" "words with spaces"
+
+运行结果:
+
+       hjiang@hjiang:~/playgroud$ ./test_para
+       
+$1 = word                                                                                                                                                                                                         
+$2 = words                                                                                                                                                                                                        
+$3 = with                                                                                                                                                                                                         
+$4 = spaces                                                                                                                                                                                                     
+                                                                                                                                                                                                                  
+ "$*" :                                                                                                                                                                                                           
+$1 = word words with spaces                                                                                                                                                                                       
+$2 =                                                                                                                                                                                                              
+$3 =                                                                                                                                                                                                              $4 =                                                                                                                                                                                                                                                                                                                                                                                                                           
+ $@ :                                                                                                                                                                                                             
+$1 = word                                                                                                                                                                                                         
+$2 = words                                                                                                                                                                                                        
+$3 = with                                                                                                                                                                                                         
+$4 = spaces                                                                                                                                                                                                       
+                                                                                                                                                                                                                  
+ "$@" :                                                                                                                                                                                                           
+$1 = word                                                                                                                                                                                                         
+$2 = words with spaces                                                                                                                                                                                           
+$3 =                                                                                                                                                                                                              
+$4 =
+
+3. BASH逐行读文本文件:
+   while IFS='' read -r line || [[ -n "$line" ]]; do
+       analy_line $line
+   done < "$1"
+
+4. BASH变量间接引用:
+   mem_len is a varible which value is "NAME_LEN"
+   : $mem_len is "NAME_LEN"
+
+   if a varible "NAME_LEN" is already in the system,
+   we can get that variable:
+
+   ${!mem_len}
+
+5. OpenVms提取路径和文件名:
+   echo 'hjiang$heng:[hahah.xixi]test.txt' | perl -pe 's/(.*)(?<=\])(.*)/$1/g'                 
+

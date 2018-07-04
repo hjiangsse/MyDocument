@@ -1,0 +1,9 @@
+#!/bin/bash -x
+
+# while-read2: read lines from a file
+while read name age sex; do
+    printf "Name: %s\t Age: %s\t Sex: %s\n" \
+           $name \
+           $age \
+           $sex
+done < test.txt
