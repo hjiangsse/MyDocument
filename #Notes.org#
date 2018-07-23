@@ -1,0 +1,44 @@
+* Outline and Writing                                                :hjiang:
+** insert heading
+M-Enter will insert a heading in current position
+        and the newly heading is same with privious heading
+** promote heading
+M-Left  will promote the heading by one level
+** demote heading 
+M-Right will demote the heading by one level
+** promote entire subtree
+M-Shift-Left will promote an entire subtree
+** demote entire subtree
+M-Shift-Right will demote an entire subtree
+* Plain List
+** unordered plain list
+   - first subitem
+   - second subiten
+     + another item
+     + some thing else
+
+(- or +) then press M-Enter, org mode will add a (- or +) automatically
+** ordered plain list
+   1. this is the first item
+   2. this is the second item
+   3. hsh
+   4. this is the trird item
+(1.) then press M-Enter, org mode will add a (2.) automatically
+** add a checkbox
+   - [ ] this is fiest checkbox
+   - [ ] this is second checkbox
+   - [ ] this is third checkbox
+start the line with - [ ], toggle the check box using C-c C-c
+* hyper links                                            :hyper_links_in_org:
+** simple urls
+   http://www.baidu.com
+** simple file path
+   file:/etc/file.pdf
+* plain-text tables
+| name      | sex | age | number |
+|-----------+-----+-----+--------|
+| hjiang    | man |  23 |    234 |
+| hjhsdkhak |     |     |        |
+|           |     |     |        |
+|           |     |     |        |
+* tags                                                         :org_set_tags:
